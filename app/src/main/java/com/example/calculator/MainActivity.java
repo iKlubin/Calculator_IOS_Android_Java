@@ -4,6 +4,8 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.AsyncPlayer;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private int ind = 0;
 
     private boolean queueNum = false;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,18 @@ public class MainActivity extends AppCompatActivity {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
         }
+        mediaPlayer = MediaPlayer.create(this, R.raw.sound_tap);
+    }
+
+    public void sound(){
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.seekTo(0);
+        }
+        mediaPlayer.start();
     }
 
     public void clickAC(View v){
+        sound();
         text.setText("0");
         Toast.makeText(this, "Для удаления одной цифры нажмите на поле чисел", Toast.LENGTH_SHORT).show();
     }
@@ -49,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickPlusMinus(View v){
+        sound();
         if (text.getText() != "0" && text.getText().charAt(0) != '-') {
             text.setText("-" + text.getText());
         } else {
@@ -57,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickPercent(View v){
+        sound();
         text.setText(String.valueOf(Double.parseDouble(text.getText().toString()) / 100));
     }
 
     public void setNum(){
-        Log.d("Test", "Queue: " + queueNum + " Num1: " + num1 + " Num2: " + num2 + " Ind: " + ind);
         try {
             if (!queueNum){
                 num1 = Double.parseDouble(text.getText().toString());
@@ -74,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click0(View v){
+        sound();
         if (text.getText().charAt(text.length() - 1) != '0') {
             text.setText(text.getText() + "0");
         }
@@ -81,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click1(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("1");
         } else {
@@ -90,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click2(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("2");
         } else {
@@ -99,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click3(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("3");
         } else {
@@ -108,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click4(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("4");
         } else {
@@ -117,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click5(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("5");
         } else {
@@ -126,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click6(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("6");
         } else {
@@ -135,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click7(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("7");
         } else {
@@ -144,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click8(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("8");
         } else {
@@ -153,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click9(View v){
+        sound();
         if (text.getText() == "0") {
             text.setText("9");
         } else {
@@ -162,12 +185,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickPoint(View v){
+        sound();
         if (text.getText().charAt(text.length() - 1) != '.'){
             text.setText(text.getText() + ".");
         }
     }
 
     public void clickEqual(View v){
+        sound();
         switch (symbol){
             case "+":
                 text.setText(String.valueOf(num1 + num2));
@@ -187,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickDiv(View v){
+        sound();
         queueNum = true;
         num1 = Double.parseDouble(text.getText().toString());
         symbol = "/";
@@ -195,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickMult(View v){
+        sound();
         queueNum = true;
         num1 = Double.parseDouble(text.getText().toString());
         symbol = "*";
@@ -203,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickPlus(View v){
+        sound();
         queueNum = true;
         num1 = Double.parseDouble(text.getText().toString());
         symbol = "+";
@@ -211,10 +239,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickMinus(View v){
+        sound();
         queueNum = true;
         num1 = Double.parseDouble(text.getText().toString());
         symbol = "-";
         text.setText(text.getText() + "-");
         ind = text.length();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
     }
 }
